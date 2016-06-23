@@ -1,0 +1,30 @@
+{% if view_user %}
+
+<form  action="/dataInfo/userprofile/" method="post">
+{% csrf_token %}
+
+    {% for views in view_user %}
+     <input style="display: inline;" type="radio" name="profile_check" value="{{ views.pk }}"/>
+        <p>User Name: {{ views.username }}</p>
+        <p> Email: {{ views.email }}</p>
+        <p> Password: {{ views.password }}</p>
+        <p>First Name: {{ views.first_name }}</p>
+        <p>Last Name: {{ views.last_name }}</p>
+        <p>Permission: {{ views.user_permissions}}</p>
+        <p>Staff: {{ views.is_staff }}</p>
+        <p>Active: {{ views.is_active }}</p>
+        <p>Super User: {{ views.is_superuser}}</p>
+        <p>Last Login: {{ views.last_login}}</p>
+        <hr>
+    {% endfor %}
+</table>
+<input type="submit" name="log_out" id="id_log_out" value="Logout" />
+<input type="submit" name="edit_profile" id="id_edit_profile" value="Edit" />
+<input type="submit" name="store_view_direct" id="id_store_view_direct" value="Store" />
+<input type="submit" name="product_view_direct" id="id_product_view_direct" value="Product"/>
+<input type="submit" name="sale_direct_direct" id="id_sale_direct_direct" value="Sale" />
+
+</form>
+{% else %}
+    <p>No views are available.</p>
+{% endif %}

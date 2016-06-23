@@ -1,0 +1,33 @@
+{% if view_customer %}
+
+<form  action="/dataInfo/customer_view/" method="post">
+{% csrf_token %}
+<table>
+<tr>
+    <th>Name</th>
+    <th>Email</th>
+    <th>password</th>
+    <th>Gender</th>
+    <th>Birthday</th>
+    <th>Delete/Update</th>
+</tr>
+    {% for views in view_customer %}
+
+        <tr>
+        <td>{{ views.name }}</td>
+        <td> {{ views.email }}</td>
+        <td>{{ views.password }}</td>
+        <td>{{ views.gender }}</td>
+        <td>{{ views.birthday }}</td>
+      
+         <td> <input style="display: inline;" type="radio" name="customer_check" value="{{ views.pk }}"/></td>
+        </tr>
+    {% endfor %}
+</table>
+<input type="submit" name="delete_selected" id="id_delete_selected" value="Delete" />
+<input type="submit" name="update_selected" id="id_update_selected" value="Update" />
+</form>
+
+{% else %}
+    <p>No views are available.</p>
+{% endif %}

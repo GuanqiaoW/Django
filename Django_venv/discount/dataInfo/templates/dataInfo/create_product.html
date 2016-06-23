@@ -1,0 +1,5 @@
+<form action="/dataInfo/create_product/" method="post">
+    {% csrf_token %}
+    {{ form.as_ul }}
+    <input type="submit" value="Submit" />
+</form>
