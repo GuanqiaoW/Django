@@ -28,6 +28,11 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
+# Authentication Backend
+
+AUTHENTICATION_BACKENDS = ('dataInfo.backends.CustomerAuthBackend', 'dataInfo.backends.StaffAuthBackend', 'django.contrib.auth.backends.ModelBackend',)
+
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -42,7 +47,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE_CLASSES = [
-    'django.middleware.security.SecurityMiddleware',
+#    'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',

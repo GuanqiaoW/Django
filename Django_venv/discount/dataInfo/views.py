@@ -246,7 +246,7 @@ def updateproduct(request,id=None):
 		product_form = ProductForm(instance = instance)
 	return render_to_response('dataInfo/update_product.html', {'form': product_form,'id':instance.id}, context_instance=RequestContext(request))
 
-
+# THis method may be useless since A customer do not create other Customers.
 @login_required(login_url='/dataInfo/login/')
 def createcustomer(request):
 
@@ -298,13 +298,28 @@ def login_view(request):
 
 		username = request.POST['username']
 		password = request.POST['password']
-		user = authenticate(username=username,password = password)
+		user = authenticate(name=username,password=password)
 		if user is not None:
+			# be activate in authenticate method
 			if user.is_active:
+				# login method:
+				# If you have an authenticated user you want to attach to the current session 
+				# this is done with a login() function.
+				# Issue: problem in login()
+				# Assumption 1: update_last_login
+				# Assumption 2: 
+				#
 				login(request,user)
 				#redirect to user profile
 				print "suffcessful login!"
-				return HttpResponseRedirect('/dataInfo/userprofile')
+
+				# chech the user type 
+				# if it is Customer,redirect to sale view
+				# if it is Staff,redirect to userprofile
+				if request.user.get_user_type() == "Customer":
+					return HttpResponseRedirect('/dataInfo/sale_view')
+				if request.user.get_user_type() == "Staff":
+					return HttpResponseRedirect('/dataInfo/userprofile')
 			else:
 				# return a disable account
 				return HttpResponse("User acount or password is incorrect")
@@ -345,7 +360,10 @@ def userprofile_view(request):
 	else:
 		pass
 	view_user = User.objects.all()
+	print view_user
 	context = {'view_user': view_user}
+	print context
+	#problem in render
 	return render(request, 'dataInfo/userprofile.html', context)
 
 
@@ -368,6 +386,7 @@ def updateprofile(request,id=None):
 def register_view(request):
 	print 'get herere'
 	if request.method == 'POST':
+		# save Customer or Staff in the model
 		register_form = RegisterForm(request.POST or None)
 		if register_form.is_valid():
 			new_user = register_form.save()

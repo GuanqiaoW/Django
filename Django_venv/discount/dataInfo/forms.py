@@ -67,4 +67,6 @@ class RegisterForm(forms.ModelForm):
         fields=('username','password','email')
 
 
+# class RegisterCustomerForm
 
+# class RegisterStaffForm

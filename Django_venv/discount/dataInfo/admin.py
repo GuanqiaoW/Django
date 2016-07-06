@@ -25,8 +25,8 @@ class StoreAdmin(admin.ModelAdmin):
 #--Solution--: 
 class CustomerAdmin(admin.ModelAdmin):
 
-	list_display = ["pk","name","email","password","gender","birthday","created"]
-	list_display_links = ["pk","name","email","password","gender","birthday","created"]
+	list_display = ["pk","name","email","password","gender","birthday","is_active","last_login","created"]
+	list_display_links = ["pk","name","email","password","gender","birthday","is_active","last_login","created"]
 	class Meta:
 		model = Customer
 
@@ -47,8 +47,8 @@ class SaleAdmin(admin.ModelAdmin):
 		return instance.product_id.name
 
 class StaffAdmin(admin.ModelAdmin):
-	list_display = ["pk","name","email","password","gender","birthday","authorized","store_id","created"]
-	list_display_links = ["pk","name","email","password","gender","birthday","authorized","store_id","created"]
+	list_display = ["pk","name","email","password","gender","birthday","authorized","store_id","is_active","last_login","created"]
+	list_display_links = ["pk","name","email","password","gender","birthday","authorized","store_id","is_active","last_login","created"]
 	class Meta:
 		model = Staff
 
