@@ -22,15 +22,26 @@ class UserList(generics.ListAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
-    def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
-
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
-
-
 class UserDetail(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     
+
+class SnippetList(generics.ListCreateAPIView):
+    queryset = Snippet.objects.all()
+    serializer_class = SnippetSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+
+    # Problem: 
+    # 1.what is perform_create
+    # 2. relationship bwtween serializer and perform_create?
+    # 3. what is serializer_class?
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+
+
+class SnippetDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Snippet.objects.all()
+    serializer_class = SnippetSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,
                       IsOwnerOrReadOnly,)
