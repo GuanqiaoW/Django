@@ -15,7 +15,7 @@ class StaffForm(forms.ModelForm):
     store_id = forms.ModelChoiceField(queryset = Store.objects.all(),empty_label="--------") # select values ?
     class Meta:
         model = Staff
-        fields = ('name','email','password','gender','birthday','authorized','store_id')
+        fields = ('name','email','password','gender','birthday','is_staff','store_id')
         widgets = {'authorized':forms.RadioSelect,
                    'gender':forms.RadioSelect,
                     'birthday':SelectDateWidget(years=range(date.today().year-50,date.today().year))

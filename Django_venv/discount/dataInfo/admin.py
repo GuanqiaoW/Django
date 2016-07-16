@@ -1,6 +1,7 @@
 from django.contrib import admin
 from .models import Product,Store,Customer,Staff,Sale
 # Register your models here.
+from django.contrib.auth.models import Permission
 
 class ProductAdmin(admin.ModelAdmin):
 
@@ -47,8 +48,8 @@ class SaleAdmin(admin.ModelAdmin):
 		return instance.product_id.name
 
 class StaffAdmin(admin.ModelAdmin):
-	list_display = ["pk","name","email","password","gender","birthday","authorized","store_id","is_active","last_login","created"]
-	list_display_links = ["pk","name","email","password","gender","birthday","authorized","store_id","is_active","last_login","created"]
+	list_display = ["pk","name","email","password","gender","birthday","is_staff","store_id","is_active","last_login","created"]
+	list_display_links = ["pk","name","email","password","gender","birthday","is_staff","store_id","is_active","last_login","created"]
 	class Meta:
 		model = Staff
 
@@ -56,6 +57,7 @@ class StaffAdmin(admin.ModelAdmin):
 	def store_id(self, instance):
 		return instance.store_id.id
 
+admin.site.register(Permission)
 admin.site.register(Sale,SaleAdmin)
 admin.site.register(Product,ProductAdmin)
 admin.site.register(Store,StoreAdmin)

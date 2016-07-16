@@ -4,6 +4,7 @@ from django.db import models
 from datetime import datetime
 from django.utils import timezone
 from django.contrib.auth.models import Permission
+from django.contrib.auth.models import AbstractBaseUser
 
 # Create your models here.
 
@@ -81,67 +82,45 @@ class Customer(models.Model):
 
   def __str__(self):
     return self.name
-
-class Staff(models.Model):
+# inherit from User
+# user method in user
+class Staff(AbstractBaseUser):
 
   yes_or_no = ((True, 'Yes'),(False, 'No'))
   male_or_female = ((True,'Male'),(False,'Female'))
 
   name = models.CharField(max_length=100,blank = False, null = False)
   email = models.EmailField(max_length=100,blank = False, null = False)
-  password = models.CharField(max_length=100,blank = False, null = False)
   gender = models.BooleanField(default = True, choices = male_or_female)
   birthday = models.DateField(default =None,blank = False, null = False)
   created = models.DateTimeField(default=datetime.now, blank=True)
-  authorized = models.BooleanField(default=False,choices = yes_or_no,db_column="is_staff") 
+  is_staff = models.BooleanField(default=False,choices = yes_or_no) 
   store_id = models.ForeignKey(Store,default=1) # relate ModelChoiceField in ModelFrom
   # store_id_r = models.IntegerField(default=1)
-  _is_active = models.BooleanField(default = False,db_column="is_active")
-  last_login = models.DateTimeField(default = timezone.now,auto_now=True, auto_now_add=False,db_column="last_login")
   # a single unique field that can be used for identification 
 
   # add cosutomer permission for staff 
-  # class Meta:
-  #   Permission = (("add_store","staff add a store"),
-  #                 ("change_store","staff change a store"),
-  #                 ("delete_store","staff delete a store"),
-  #                 ("add_product","staff add a product"),
-  #                 ("change_product","staff change a product"),
-  #                 ("delete_product","staff delete a product"),
-  #                 ("add_sale","staff add a sale"),
-  #                 ("change_sale","staff change a sale"),
-  #                 ("delete_sale","staff delete a sale"),
-  #                 )
-  @property
-  def is_active(self):
-    return self._is_active
-  @is_active.setter
-  def is_active(self,value):
-    self._is_active = value
-
-
-  # @property
-  # def has_perm(self,obj=None):
-
-
-  # @property
-  # def is_staff(self):
-  #   return self._is_staff
-  # @is_staff.setter
-  # def is_staff(self,value):
-  #   self._is_staff = value
-
-  def is_authenticated(self):
-    return True
-
+  REQUIRED_FIELDS = ['email']
+  class Meta:
+        permissions = (
+            ("can_drive", "Can drive"),
+        )
+  
+  perm_list = set()
   def get_user_type(self):
     return "Staff"
 
-  # def check_password(self,password):
-  #   if password == getattr(user,'password'):
-  #     return True
-  #   else:
-  #     return False
+  def has_perm(self, perm, obj=None):
+    if perm in self.get_all_permissions():
+      return True
+    return False
+  
+  def get_all_permissions(self, obj=None):
+        return self.perm_list
+
+  def asgin_perm(self,perm,object=None):
+    self.perm_list.add(perm)
+  
   def __str__(self):
     return self.name
 

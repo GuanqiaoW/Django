@@ -17,6 +17,7 @@ class CustomerAuthBackend(object):
     # answer: parameters pass from login method
     def authenticate(self, name=None, password=None):
         try:
+            # can user email and phone number to register
             # TODO : check User is None
             user = Customer.objects.get(name=name)
             # why return user at this place?

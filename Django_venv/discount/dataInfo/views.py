@@ -30,7 +30,9 @@ def addStore(request):
 	# check whether it's valid:
         if form.is_valid():
             # process the data in form.cleaned_data as required
-            form.save()
+            
+            if request.user.has_perm("add_store"):
+            	form.save()
             # redirect to a new URL:
             return HttpResponseRedirect('/dataInfo/store_view/')
     # if a GET (or any other method) we'll create a blank form
@@ -292,7 +294,6 @@ def updatecustomer(request,id=None):
 
 
 # login view: authroized user log in and then redirect to other view page
-@login_required(login_url='/dataInfo/login/')
 def login_view(request):
 	if request.method == 'POST':
 
@@ -319,6 +320,17 @@ def login_view(request):
 				if request.user.get_user_type() == "Customer":
 					return HttpResponseRedirect('/dataInfo/sale_view')
 				if request.user.get_user_type() == "Staff":
+					# set permission to user
+					request.user.asgin_perm("add_store")
+					request.user.asgin_perm("add_product")
+					request.user.asgin_perm("add_sale")
+					request.user.asgin_perm("change_store")
+					request.user.asgin_perm("change_product")
+					request.user.asgin_perm("change_sale")
+					request.user.asgin_perm("delete_store")
+					request.user.asgin_perm("delete_product")
+					request.user.asgin_perm("delete_sale")
+
 					return HttpResponseRedirect('/dataInfo/userprofile')
 			else:
 				# return a disable account
@@ -336,13 +348,13 @@ def login_view(request):
 # logout view authroized user log in and then redirect to other view page
 @login_required(login_url='/dataInfo/login/')
 def logout_view(request):
-	logout(request)
+	auth.logout(request)
 	# rerdirect to login page
 	return HttpResponseRedirect('/dataInfo/login')
 
 @login_required(login_url='/dataInfo/login/')
 def userprofile_view(request):
-
+	print request.user.get_all_permissions()
 	if request.method == 'POST':
 		if request.POST.get('log_out'):
 			return HttpResponseRedirect(reverse('dataInfo:logout_view'))
